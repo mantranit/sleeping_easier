@@ -1,4 +1,4 @@
-# sleeping_easier
+# Sleeping Easier (com.mantran.sleepingeasier)
 
 Help you sleeping easier with melodius music combind with the sound of rain.
 
