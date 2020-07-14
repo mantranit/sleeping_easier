@@ -40,6 +40,7 @@ class _AudioAppState extends State<AudioApp> {
       position != null ? position.toString().split('.').first : '';
 
   bool isMuted = false;
+  bool isLoop = false;
 
   StreamSubscription _positionSubscription;
   StreamSubscription _audioPlayerStateSubscription;
@@ -68,10 +69,11 @@ class _AudioAppState extends State<AudioApp> {
           if (s == AudioPlayerState.PLAYING) {
             setState(() => duration = audioPlayer.duration);
           } else if (s == AudioPlayerState.STOPPED) {
-            onComplete();
             setState(() {
               position = duration;
             });
+          } else if (s == AudioPlayerState.COMPLETED) {
+            onComplete();
           }
         }, onError: (msg) {
           setState(() {
@@ -110,7 +112,9 @@ class _AudioAppState extends State<AudioApp> {
   void onComplete() {
     setState(() => playerState = PlayerState.stopped);
 
-    play();
+    if (isLoop) {
+      play();
+    }
   }
 
   //write to app path
@@ -197,6 +201,7 @@ class _AudioAppState extends State<AudioApp> {
               min: 0.0,
               max: duration.inMilliseconds.toDouble()),
 //        if (position != null) _buildMuteButtons(),
+        if (position != null) _buildLoopButtons(),
         if (position != null) _buildProgressView()
       ],
     ),
@@ -240,6 +245,26 @@ class _AudioAppState extends State<AudioApp> {
             onPressed: () => mute(false),
             icon: Icon(Icons.headset, color: Colors.cyan),
             label: Text('Unmute', style: TextStyle(color: Colors.cyan)),
+          ),
+      ],
+    );
+  }
+
+  Row _buildLoopButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        if (!isLoop)
+          FlatButton.icon(
+            onPressed: () => setState(() => isLoop = true),
+            icon: Icon(Icons.repeat, color: Colors.grey, size: 32.0),
+            label: Text('No Repeat', style: TextStyle(color: Colors.grey)),
+          ),
+        if (isLoop)
+          FlatButton.icon(
+            onPressed: () => setState(() => isLoop = false),
+            icon: Icon(Icons.repeat_one, color: Colors.cyan, size: 32.0),
+            label: Text('Repeat', style: TextStyle(color: Colors.cyan)),
           ),
       ],
     );
