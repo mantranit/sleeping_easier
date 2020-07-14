@@ -109,6 +109,8 @@ class _AudioAppState extends State<AudioApp> {
 
   void onComplete() {
     setState(() => playerState = PlayerState.stopped);
+
+    play();
   }
 
   //write to app path
