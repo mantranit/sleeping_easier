@@ -73,21 +73,22 @@ class _AudioPlayerContainerState extends State<AudioPlayerContainer> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              if (!isPlaying)
-                IconButton(
-                  onPressed: () => play(),
-                  icon: Icon(Icons.play_arrow),
-                  iconSize: 230,
-                  color: Colors.cyan,
-                )
-              else
-                IconButton(
+              AnimatedCrossFade(
+                duration: const Duration(seconds: 1),
+                firstChild: IconButton(
                   onPressed: () => stop(),
                   icon: Icon(Icons.stop),
                   iconSize: 230,
-                  color: Colors.cyan,
+                  color: Color(0xFF76B7EB),
                 ),
-
+                secondChild: IconButton(
+                  onPressed: () => play(),
+                  icon: Icon(Icons.play_arrow),
+                  iconSize: 230,
+                  color: Color(0xFF76B7EB),
+                ),
+                crossFadeState: isPlaying ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              )
             ],
           ),
         ),
@@ -95,7 +96,7 @@ class _AudioPlayerContainerState extends State<AudioPlayerContainer> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() => isLoop = !isLoop),
         child: isLoop ? Icon(Icons.repeat_one) : Icon(Icons.repeat),
-        backgroundColor: isLoop ? Colors.cyan : Colors.grey,
+        backgroundColor: isLoop ? Color(0xFF76B7EB) : Color(0xFFF5D7B7),
       )
     );
   }
